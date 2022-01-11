@@ -2,7 +2,7 @@
 
 starts on localhost:9000
 
-youo can use https://oidcdebugger.com/ tool to execute request:
+you can use https://oidcdebugger.com/ tool to execute request:
 
 .... tbd
 
