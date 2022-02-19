@@ -16,7 +16,7 @@ plugins {
 allprojects {
 	group = "io.github.xsmirnovx"
 	version = "0.0.1-SNAPSHOT"
-	java.sourceCompatibility = JavaVersion.VERSION_11
+	//java.sourceCompatibility = JavaVersion.VERSION_11
 
 	tasks.withType<KotlinCompile> {
 		kotlinOptions {
@@ -27,6 +27,10 @@ allprojects {
 
 	tasks.withType<Test> {
 		useJUnitPlatform()
+	}
+
+	repositories {
+		mavenCentral()
 	}
 }
 
