@@ -1,4 +1,4 @@
-package io.github.xsmirnovx.oauth2.auth.server.demo.configuration
+package io.github.xsmirnovx.oauth2.server.configuration
 
 import org.springframework.context.annotation.Bean
 import org.springframework.security.config.Customizer
@@ -26,18 +26,18 @@ class SecurityConfiguration {
     }
 
     @Bean
+    fun passwordEncoder(): PasswordEncoder {
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder()
+    }
+
+    @Bean
     fun users(): UserDetailsService {
-        val user = User.withDefaultPasswordEncoder()
+        val user = User.builder()
             .username("user1")
-            .password("password")
+            .password(passwordEncoder().encode("password"))
             .roles("USER")
             .build()
 
         return InMemoryUserDetailsManager(user)
-    }
-
-    @Bean
-    fun passwordEncoder(): PasswordEncoder {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder()
     }
 }

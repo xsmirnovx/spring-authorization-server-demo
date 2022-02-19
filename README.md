@@ -1,11 +1,3 @@
 # spring-authorization-server-demo
 
-starts on localhost:9000
-
-you can use https://oidcdebugger.com/ tool to execute request:
-
-.... tbd
-
-exchange authorisation code for token:
-
-
+Demo implementation of new Spring OAuth2.1 Authorization Server https://github.com/spring-projects/spring-authorization-server 
