@@ -7,25 +7,35 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings
 import org.springframework.security.oauth2.server.authorization.config.TokenSettings
 import java.time.Instant
-import javax.persistence.Entity
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
-class RegisteredClientEntity {
+data class RegisteredClientEntity(
 
     @Id
-    private val id: String? = null
-    private val clientId: String? = null
-    private val clientIdIssuedAt: Instant? = null
-    private val clientSecret: String? = null
-    private val clientSecretExpiresAt: Instant? = null
-    private val clientName: String? = null
-    private val clientAuthenticationMethods: Set<ClientAuthenticationMethod>? = null
-    private val authorizationGrantTypes: Set<AuthorizationGrantType>? = null
-    private val redirectUris: Set<String>? = null
-    private val scopes: Set<String>? = null
-    private val clientSettings: ClientSettings? = null
-    private val tokenSettings: TokenSettings? = null
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    val id: String? = null,
+    val clientId: String? = null,
+    val clientIdIssuedAt: Instant? = null,
+    val clientSecret: String? = null,
+    val clientSecretExpiresAt: Instant? = null,
+    val clientName: String? = null,
+
+    @ElementCollection(targetClass = ClientAuthenticationMethod::class)
+    val clientAuthenticationMethods: Set<ClientAuthenticationMethod> = emptySet(),
+
+    @ElementCollection(targetClass = AuthorizationGrantType::class)
+    val authorizationGrantTypes: Set<AuthorizationGrantType> = emptySet(),
+
+    @ElementCollection(targetClass = String::class)
+    val redirectUris: Set<String>? = null,
+
+    @ElementCollection(targetClass = String::class)
+    val scopes: Set<String>? = null,
+
+    val clientSettings: ClientSettings? = null,
+    val tokenSettings: TokenSettings? = null
+) {
 
     companion object {
         fun fromRegisteredClient(registeredClient: RegisteredClient?): RegisteredClientEntity {
