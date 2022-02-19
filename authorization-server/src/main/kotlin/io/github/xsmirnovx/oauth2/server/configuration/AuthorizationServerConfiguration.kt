@@ -46,7 +46,7 @@ class AuthorizationServerConfiguration (val passwordEncoder: PasswordEncoder) {
             .build()
     }
 
-    @Bean
+    //@Bean
     fun registeredClientRepository(jdbcTemplate: JdbcTemplate?): RegisteredClientRepository {
 
         //auth code flow + PKCE

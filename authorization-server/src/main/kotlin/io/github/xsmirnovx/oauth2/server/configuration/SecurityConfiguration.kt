@@ -26,17 +26,6 @@ class SecurityConfiguration {
     }
 
     @Bean
-    fun users(): UserDetailsService {
-        val user = User.withDefaultPasswordEncoder()
-            .username("user1")
-            .password("password")
-            .roles("USER")
-            .build()
-
-        return InMemoryUserDetailsManager(user)
-    }
-
-    @Bean
     fun passwordEncoder(): PasswordEncoder {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder()
     }
