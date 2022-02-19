@@ -1,4 +1,4 @@
-package io.github.xsmirnovx.oauth2.auth.server.demo.configuration
+package io.github.xsmirnovx.oauth2.server.configuration
 
 import org.springframework.context.annotation.Bean
 import org.springframework.security.config.Customizer

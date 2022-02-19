@@ -1,4 +1,4 @@
-package io.github.xsmirnovx.oauth2.auth.server.demo
+package io.github.xsmirnovx.oauth2.server
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication

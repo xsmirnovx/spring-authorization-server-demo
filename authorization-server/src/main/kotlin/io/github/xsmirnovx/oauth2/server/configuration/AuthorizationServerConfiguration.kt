@@ -1,4 +1,4 @@
-package io.github.xsmirnovx.oauth2.auth.server.demo.configuration
+package io.github.xsmirnovx.oauth2.server.configuration
 
 import com.nimbusds.jose.jwk.*
 import com.nimbusds.jose.jwk.source.JWKSource
