@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface JpaRegisteredClientRepository : JpaRepository<RegisteredClientEntity, String> {
+interface RegisteredClientJpaRepository : JpaRepository<RegisteredClientEntity, String> {
 
     fun findByClientId(clientId: String): Optional<RegisteredClientEntity>
 }

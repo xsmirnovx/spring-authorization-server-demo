@@ -9,16 +9,16 @@ import org.springframework.stereotype.Component
 
 @Component
 class RegisteredClientRepositoryAdapter(
-    val jpaRegisteredClientRepository: JpaRegisteredClientRepository
+    val registeredClientJpaRepository: RegisteredClientJpaRepository
 ) : RegisteredClientRepository {
 
     override fun save(registeredClient: RegisteredClient) {
-        jpaRegisteredClientRepository
+        registeredClientJpaRepository
             .save(RegisteredClientEntity.fromRegisteredClient(registeredClient))
     }
 
     override fun findById(id: String): RegisteredClient {
-        return jpaRegisteredClientRepository.findById(id)
+        return registeredClientJpaRepository.findById(id)
             .map { toRegisteredClient(it) }
             .orElseThrow {
                 RegisteredClientNotFoundException("Client with id [$id] not found")
@@ -26,7 +26,7 @@ class RegisteredClientRepositoryAdapter(
     }
 
     override fun findByClientId(clientId: String): RegisteredClient {
-        return jpaRegisteredClientRepository.findByClientId(clientId)
+        return registeredClientJpaRepository.findByClientId(clientId)
             .map { toRegisteredClient(it) }
             .orElseThrow{
                 RegisteredClientNotFoundException("Client with client id [$clientId] not found")
