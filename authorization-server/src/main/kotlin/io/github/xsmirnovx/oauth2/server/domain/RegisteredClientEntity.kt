@@ -53,6 +53,13 @@ data class RegisteredClientEntity(
 ) {
 
     companion object {
+
+        private fun <T> appender(values: Set<T?>?): (MutableSet<T?>) -> Unit {
+            return {
+                values?.forEach { value: T? -> it.add(value) }
+            }
+        }
+
         fun fromRegisteredClient(registeredClient: RegisteredClient?): RegisteredClientEntity {
             val registeredClientEntity = RegisteredClientEntity()
             BeanUtils.copyProperties(registeredClient!!, registeredClientEntity)
@@ -68,28 +75,16 @@ data class RegisteredClientEntity(
                 .clientSecretExpiresAt(entity.clientSecretExpiresAt)
                 .clientName(entity.clientName)
                 .clientAuthenticationMethods {
-                    entity.clientAuthenticationMethods
-                        ?.stream()?.forEach { method: ClientAuthenticationMethod ->
-                            it.add(method)
-                        }
+                    appender(entity.clientAuthenticationMethods).invoke(it)
                 }
                 .authorizationGrantTypes {
-                    entity.authorizationGrantTypes
-                        .stream().forEach { grant: AuthorizationGrantType ->
-                            it.add(grant)
-                        }
+                    appender(entity.authorizationGrantTypes).invoke(it)
                 }
                 .redirectUris {
-                    entity.redirectUris
-                        ?.stream()?.forEach { uri: String ->
-                            it.add(uri)
-                        }
+                    appender(entity.redirectUris).invoke(it)
                 }
                 .scopes {
-                    entity.scopes
-                        ?.stream()?.forEach { scope: String ->
-                            it.add(scope)
-                        }
+                    appender(entity.scopes).invoke(it)
                 }
                 .clientSettings(entity.clientSettings)
                 .tokenSettings(entity.tokenSettings)
