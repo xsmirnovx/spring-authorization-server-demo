@@ -35,19 +35,15 @@ data class RegisteredClientEntity(
 
     val clientName: String? = null,
 
-    @Column(name = "client_authentication_methods")
     @Convert(converter = ClientAuthenticationMethodsConverter::class)
     val clientAuthenticationMethods: Set<ClientAuthenticationMethod>? = null,
 
-    @Column(name = "authorization_grant_types")
     @Convert(converter = AuthorizationGrantTypesConverter::class)
     val authorizationGrantTypes: Set<AuthorizationGrantType> = emptySet(),
 
-    @Column(name = "redirect_uris")
     @Convert(converter = StringListToStringConverter::class)
     val redirectUris: Set<String>? = null,
 
-    @Column(name = "scopes")
     @Convert(converter = StringListToStringConverter::class)
     val scopes: Set<String>? = null,
 
@@ -71,10 +67,30 @@ data class RegisteredClientEntity(
                 .clientSecret(entity.clientSecret)
                 .clientSecretExpiresAt(entity.clientSecretExpiresAt)
                 .clientName(entity.clientName)
-                .clientAuthenticationMethods { entity.clientAuthenticationMethods }
-                .authorizationGrantTypes { entity.authorizationGrantTypes }
-                .redirectUris { entity.redirectUris }
-                .scopes { entity.scopes}
+                .clientAuthenticationMethods {
+                    entity.clientAuthenticationMethods
+                        ?.stream()?.forEach { method: ClientAuthenticationMethod ->
+                            it.add(method)
+                        }
+                }
+                .authorizationGrantTypes {
+                    entity.authorizationGrantTypes
+                        .stream().forEach { grant: AuthorizationGrantType ->
+                            it.add(grant)
+                        }
+                }
+                .redirectUris {
+                    entity.redirectUris
+                        ?.stream()?.forEach { uri: String ->
+                            it.add(uri)
+                        }
+                }
+                .scopes {
+                    entity.scopes
+                        ?.stream()?.forEach { scope: String ->
+                            it.add(scope)
+                        }
+                }
                 .clientSettings(entity.clientSettings)
                 .tokenSettings(entity.tokenSettings)
                 .build()

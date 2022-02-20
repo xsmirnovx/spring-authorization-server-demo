@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.stereotype.Component
 
 @Component
-class RegisteredClientRepositoryAdapter(
+class RegisteredClientRepositoryImpl(
     val registeredClientJpaRepository: RegisteredClientJpaRepository
 ) : RegisteredClientRepository {
 

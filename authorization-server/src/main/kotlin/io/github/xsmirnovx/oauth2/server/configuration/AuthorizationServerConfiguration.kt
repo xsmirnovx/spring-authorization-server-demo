@@ -64,16 +64,19 @@ class AuthorizationServerConfiguration {
     fun jwtCustomizer(): OAuth2TokenCustomizer<JwtEncodingContext> {
         return OAuth2TokenCustomizer { context: JwtEncodingContext? ->
 
-            val authorities = context
+            context
                 ?.takeIf { it.tokenType == OAuth2TokenType.ACCESS_TOKEN }
                 ?.let {
-                    val auth = it.getPrincipal<Authentication>()
-                    auth.authorities.stream()
-                        .map { obj: GrantedAuthority -> obj.authority }
+                    ctx -> ctx.getPrincipal<Authentication>()
+                        .authorities.stream()
+                        .map { it.authority }
                         .collect(Collectors.toSet())
                 }
+                ?.also {
+                    context.claims?.claim("user-authorities", it)
+                }
 
-            context?.claims?.claim("user-authorities", authorities)
+
         }
     }
 
