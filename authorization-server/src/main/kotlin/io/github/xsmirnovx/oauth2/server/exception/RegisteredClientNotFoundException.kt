@@ -1,4 +1,4 @@
-package io.github.xsmirnovx.oauth2.server.exeption
+package io.github.xsmirnovx.oauth2.server.exception
 
 import java.lang.RuntimeException
 

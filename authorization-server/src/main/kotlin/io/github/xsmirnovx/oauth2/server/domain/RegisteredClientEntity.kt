@@ -74,18 +74,10 @@ data class RegisteredClientEntity(
                 .clientSecret(entity.clientSecret)
                 .clientSecretExpiresAt(entity.clientSecretExpiresAt)
                 .clientName(entity.clientName)
-                .clientAuthenticationMethods {
-                    appender(entity.clientAuthenticationMethods).invoke(it)
-                }
-                .authorizationGrantTypes {
-                    appender(entity.authorizationGrantTypes).invoke(it)
-                }
-                .redirectUris {
-                    appender(entity.redirectUris).invoke(it)
-                }
-                .scopes {
-                    appender(entity.scopes).invoke(it)
-                }
+                .clientAuthenticationMethods(appender(entity.clientAuthenticationMethods))
+                .authorizationGrantTypes(appender(entity.authorizationGrantTypes))
+                .redirectUris(appender(entity.redirectUris))
+                .scopes(appender(entity.scopes))
                 .clientSettings(entity.clientSettings)
                 .tokenSettings(entity.tokenSettings)
                 .build()

@@ -2,7 +2,7 @@ package io.github.xsmirnovx.oauth2.server.repository
 
 import io.github.xsmirnovx.oauth2.server.domain.RegisteredClientEntity
 import io.github.xsmirnovx.oauth2.server.domain.RegisteredClientEntity.Companion.toRegisteredClient
-import io.github.xsmirnovx.oauth2.server.exeption.RegisteredClientNotFoundException
+import io.github.xsmirnovx.oauth2.server.exception.RegisteredClientNotFoundException
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository
 import org.springframework.stereotype.Component
