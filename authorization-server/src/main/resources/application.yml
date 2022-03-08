@@ -2,9 +2,9 @@ server.port: 9001
 spring:
   jpa:
     show-sql: true
-  datasource:
-    url: jdbc:postgresql://localhost:5433/auth
-    driver-class-name: org.postgresql.Driver
-    username: user
-    password: password
-    hikari.schema: public
+#  datasource:
+#    url: jdbc:postgresql://localhost:5433/auth
+#    driver-class-name: org.postgresql.Driver
+#    username: user
+#    password: password
+#    hikari.schema: public
