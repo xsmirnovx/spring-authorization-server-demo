@@ -21,7 +21,16 @@ class DefaultClientsDatabaseInitializer(
     ) : ApplicationListener<ApplicationReadyEvent?> {
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-        registeredClientJpaRepository.saveAll(defaultClients)
+
+        defaultClients.forEach {
+            it.clientId?.let {
+                clientId -> registeredClientJpaRepository
+                            .findByClientId(clientId)
+                            .ifPresentOrElse( {}, { registeredClientJpaRepository.save(it) })
+            }
+        }
+
+ //       registeredClientJpaRepository.saveAll(defaultClients)
     }
 
     private val defaultClients: Set<RegisteredClientEntity>
@@ -49,14 +58,15 @@ class DefaultClientsDatabaseInitializer(
                 authorizationGrantTypes = setOf(
                     AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN
                 ),
-                redirectUris = setOf("https://oidcdebugger.com/debug"),
+                redirectUris = setOf(
+                    "https://oidcdebugger.com/debug", "http://react-app:5001/oauth_callback"),
                 scopes = setOf(OidcScopes.OPENID),
                 tokenSettings = tokenSettings
             )
 
             val clientCredentialsClient = RegisteredClientEntity(
-                clientId = "jira-plugin",
-                clientName = "jira-plugin",
+                clientId = "demo-client-credentials-client",
+                clientName = "demo-client-credentials-client",
                 clientSecret = "{noop}123456",
                 clientAuthenticationMethods = setOf(ClientAuthenticationMethod.CLIENT_SECRET_POST),
                 authorizationGrantTypes = setOf(AuthorizationGrantType.CLIENT_CREDENTIALS),

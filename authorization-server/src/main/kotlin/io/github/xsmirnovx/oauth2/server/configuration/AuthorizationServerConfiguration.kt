@@ -7,14 +7,14 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
+import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.security.config.Customizer
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration
 import org.springframework.security.core.Authentication
-import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.oauth2.core.*
-import org.springframework.security.oauth2.server.authorization.JwtEncodingContext
-import org.springframework.security.oauth2.server.authorization.OAuth2TokenCustomizer
+import org.springframework.security.oauth2.server.authorization.*
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository
 import org.springframework.security.oauth2.server.authorization.config.*
 import org.springframework.security.web.SecurityFilterChain
 import java.security.KeyPair
@@ -35,21 +35,24 @@ class AuthorizationServerConfiguration {
         return http.formLogin(Customizer.withDefaults()).build()
     }
 
+//    @Bean
+//    fun authorizationService(jdbcTemplate: JdbcTemplate,
+//            registeredClientRepository: RegisteredClientRepository): OAuth2AuthorizationService {
+//
+//        return JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository)
+//    }
+
     @Bean
     fun tokenSettings(): TokenSettings {
-        return TokenSettings.builder()
-            .accessTokenTimeToLive(Duration.ofDays(1L))
-            .build()
+        return TokenSettings.builder().accessTokenTimeToLive(Duration.ofDays(1L)).build()
     }
 
     @Bean
     fun jwkSource(): JWKSource<SecurityContext> {
         val rsaKey = generateRsa()
         val jwkSet = JWKSet(rsaKey)
-        return JWKSource { jwkSelector: JWKSelector, securityContext: SecurityContext? ->
-            jwkSelector.select(
-                jwkSet
-            )
+        return JWKSource {
+                jwkSelector: JWKSelector, _: SecurityContext? -> jwkSelector.select(jwkSet)
         }
     }
 
@@ -65,18 +68,14 @@ class AuthorizationServerConfiguration {
         return OAuth2TokenCustomizer { context: JwtEncodingContext? ->
 
             context
-                ?.takeIf { it.tokenType == OAuth2TokenType.ACCESS_TOKEN }
-                ?.let {
-                    ctx -> ctx.getPrincipal<Authentication>()
-                        .authorities.stream()
-                        .map { it.authority }
-                        .collect(Collectors.toSet())
+                ?.takeIf {
+                    it.tokenType == OAuth2TokenType.ACCESS_TOKEN
                 }
+                ?.getPrincipal<Authentication>()?.authorities?.stream()?.map { it.authority }
+                ?.collect(Collectors.toSet())
                 ?.also {
                     context.claims?.claim("user-authorities", it)
                 }
-
-
         }
     }
 
@@ -91,7 +90,6 @@ class AuthorizationServerConfiguration {
                 .build()
         }
 
-        //@SneakyThrows(NoSuchAlgorithmException::class)
         private fun generateRsaKey(): KeyPair {
             val keyPairGenerator = KeyPairGenerator.getInstance("RSA")
             keyPairGenerator.initialize(2048)

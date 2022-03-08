@@ -22,14 +22,14 @@ class App extends React.Component {
                 <header>
                     <h1>FusionAuth Example: React</h1>
                     <Greeting body={this.state.body}/>
-                    <LogInOut body={this.state.body} uri={`http://localhost:${config.serverPort}`}/>
+                    <LogInOut body={this.state.body} uri={`http://react-app:${config.serverPort}`}/>
                 </header>
             </div>
         );
     }
 
     componentDidMount() {
-        fetch(`http://localhost:${config.serverPort}/user`, {
+        fetch(`http://react-app:${config.serverPort}/user`, {
             credentials: 'include' // fetch won't send cookies unless you set credentials
         })
             .then(response => response.json())

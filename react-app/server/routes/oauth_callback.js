@@ -8,7 +8,7 @@ router.get('/', (req, res) => {
         // POST request to /token endpoint
         {
             method: 'POST',
-            uri: `http://auth-server:${config.fusionAuthPort}/oauth2/token`,
+            uri: `http://auth-server:${config.authServerPort}/oauth2/token`,
             form: {
                 'client_id': config.clientID,
                 'client_secret': config.clientSecret,
@@ -21,10 +21,15 @@ router.get('/', (req, res) => {
         // callback
         (error, response, body) => {
             // save token to session
-            req.session.token = JSON.parse(body).access_token;
+            try {
+                req.session.token = JSON.parse(body).access_token;
+                //localStorage.setItem("accessToken", JSON.parse(body).access_token)
 
-            // redirect to the React app
-            res.redirect(`http://localhost:${config.clientPort}`);
+                // redirect to the React app
+                res.redirect(`http://react-app:${config.clientPort}`);
+            } catch (ex) {
+                console.log("oauth_callback failed: " + ex.message)
+            }
         }
     );
 });

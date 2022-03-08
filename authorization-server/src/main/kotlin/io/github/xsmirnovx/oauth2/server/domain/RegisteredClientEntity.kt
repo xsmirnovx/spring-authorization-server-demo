@@ -1,11 +1,8 @@
 package io.github.xsmirnovx.oauth2.server.domain
 
-import io.github.xsmirnovx.oauth2.server.converter.AuthorizationGrantTypesConverter
-import io.github.xsmirnovx.oauth2.server.converter.ClientAuthenticationMethodsConverter
-import io.github.xsmirnovx.oauth2.server.converter.StringListToStringConverter
+import io.github.xsmirnovx.oauth2.server.converter.*
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.beans.BeanUtils
-import org.springframework.data.annotation.CreatedDate
 import org.springframework.data.jpa.domain.support.AuditingEntityListener
 import org.springframework.security.oauth2.core.AuthorizationGrantType
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod
@@ -26,7 +23,7 @@ data class RegisteredClientEntity(
 
     val clientId: String? = null,
 
-    @CreatedDate
+    @Column(columnDefinition = "TIMESTAMP")
     val clientIdIssuedAt: Instant? = Instant.now(),
 
     val clientSecret: String? = null,
@@ -47,8 +44,10 @@ data class RegisteredClientEntity(
     @Convert(converter = StringListToStringConverter::class)
     val scopes: Set<String>? = null,
 
+    @Convert(converter = ClientSettingsConverter::class)
     val clientSettings: ClientSettings = ClientSettings.builder().build(),
 
+    @Convert(converter = TokenSettingsConverter::class)
     val tokenSettings: TokenSettings = TokenSettings.builder().build()
 ) {
 
