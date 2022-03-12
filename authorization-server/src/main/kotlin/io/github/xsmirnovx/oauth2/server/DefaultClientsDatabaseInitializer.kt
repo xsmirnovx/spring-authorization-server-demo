@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class DefaultClientsDatabaseInitializer(
-    val registeredClientJpaRepository: RegisteredClientJpaRepository,
-    val passwordEncoder: PasswordEncoder,
-    val tokenSettings: TokenSettings,
+        val registeredClientJpaRepository: RegisteredClientJpaRepository,
+        val passwordEncoder: PasswordEncoder,
+        val tokenSettings: TokenSettings,
 
     ) : ApplicationListener<ApplicationReadyEvent?> {
 
@@ -25,12 +25,10 @@ class DefaultClientsDatabaseInitializer(
         defaultClients.forEach {
             it.clientId?.let {
                 clientId -> registeredClientJpaRepository
-                            .findByClientId(clientId)
-                            .ifPresentOrElse( {}, { registeredClientJpaRepository.save(it) })
+                                .findByClientId(clientId)
+                                .ifPresentOrElse( {}, { registeredClientJpaRepository.save(it) })
             }
         }
-
- //       registeredClientJpaRepository.saveAll(defaultClients)
     }
 
     private val defaultClients: Set<RegisteredClientEntity>
