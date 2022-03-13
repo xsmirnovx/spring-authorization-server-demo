@@ -1,9 +1,7 @@
 package io.github.xsmirnovx.oauth2.server.domain
 
 import org.hibernate.annotations.GenericGenerator
-import javax.persistence.Entity
-import javax.persistence.GeneratedValue
-import javax.persistence.Id
+import javax.persistence.*
 
 @Entity
 data class User(

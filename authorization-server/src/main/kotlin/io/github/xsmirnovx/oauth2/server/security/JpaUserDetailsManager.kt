@@ -2,14 +2,17 @@ package io.github.xsmirnovx.oauth2.server.security
 
 import io.github.xsmirnovx.oauth2.server.repository.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.provisioning.UserDetailsManager
 import org.springframework.stereotype.Service
 
-@Service
-class JpaUserDetailsManager(val userRepository: UserRepository) : UserDetailsManager {
+//@Service
+class JpaUserDetailsManager(private val userRepository: UserRepository) : UserDetailsManager {
 
     override fun loadUserByUsername(username: String?): UserDetails {
-        TODO("Not yet implemented")
+        return userRepository.findByUsername(username)
+            .map { SecurityUser(it) }
+            .orElseThrow { UsernameNotFoundException(username) }
     }
 
     override fun createUser(user: UserDetails?) {

@@ -57,7 +57,8 @@ class DefaultClientsDatabaseInitializer(
                     AuthorizationGrantType.AUTHORIZATION_CODE, AuthorizationGrantType.REFRESH_TOKEN
                 ),
                 redirectUris = setOf(
-                    "https://oidcdebugger.com/debug", "http://react-app:5001/oauth_callback"),
+                    "https://oidcdebugger.com/debug", "http://react-app:5001/oauth_callback"
+                ),
                 scopes = setOf(OidcScopes.OPENID),
                 tokenSettings = tokenSettings
             )
