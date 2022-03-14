@@ -8,17 +8,17 @@ import org.springframework.security.oauth2.server.authorization.client.Registere
 import org.springframework.stereotype.Component
 
 @Component
-class RegisteredClientRepositoryImpl(
-    val registeredClientJpaRepository: RegisteredClientJpaRepository
+class JpaRegisteredClientRepository(
+    val registeredClientEntityRepository: RegisteredClientEntityRepository
 ) : RegisteredClientRepository {
 
     override fun save(registeredClient: RegisteredClient) {
-        registeredClientJpaRepository
+        registeredClientEntityRepository
             .save(RegisteredClientEntity.fromRegisteredClient(registeredClient))
     }
 
     override fun findById(id: String): RegisteredClient {
-        return registeredClientJpaRepository.findById(id)
+        return registeredClientEntityRepository.findById(id)
             .map { toRegisteredClient(it) }
             .orElseThrow {
                 RegisteredClientNotFoundException("Client with id [$id] not found")
@@ -26,7 +26,7 @@ class RegisteredClientRepositoryImpl(
     }
 
     override fun findByClientId(clientId: String): RegisteredClient {
-        return registeredClientJpaRepository.findByClientId(clientId)
+        return registeredClientEntityRepository.findByClientId(clientId)
             .map { toRegisteredClient(it) }
             .orElseThrow {
                 RegisteredClientNotFoundException("Client with client id [$clientId] not found")

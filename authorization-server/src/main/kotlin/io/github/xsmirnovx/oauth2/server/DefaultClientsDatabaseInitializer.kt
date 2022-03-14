@@ -1,7 +1,7 @@
 package io.github.xsmirnovx.oauth2.server
 
 import io.github.xsmirnovx.oauth2.server.domain.RegisteredClientEntity
-import io.github.xsmirnovx.oauth2.server.repository.RegisteredClientJpaRepository
+import io.github.xsmirnovx.oauth2.server.repository.RegisteredClientEntityRepository
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Component
 
 @Component
 class DefaultClientsDatabaseInitializer(
-        val registeredClientJpaRepository: RegisteredClientJpaRepository,
-        val passwordEncoder: PasswordEncoder,
-        val tokenSettings: TokenSettings,
+    val registeredClientEntityRepository: RegisteredClientEntityRepository,
+    val passwordEncoder: PasswordEncoder,
+    val tokenSettings: TokenSettings,
 
     ) : ApplicationListener<ApplicationReadyEvent?> {
 
@@ -24,9 +24,9 @@ class DefaultClientsDatabaseInitializer(
 
         defaultClients.forEach {
             it.clientId?.let {
-                clientId -> registeredClientJpaRepository
+                clientId -> registeredClientEntityRepository
                                 .findByClientId(clientId)
-                                .ifPresentOrElse( {}, { registeredClientJpaRepository.save(it) })
+                                .ifPresentOrElse( {}, { registeredClientEntityRepository.save(it) })
             }
         }
     }

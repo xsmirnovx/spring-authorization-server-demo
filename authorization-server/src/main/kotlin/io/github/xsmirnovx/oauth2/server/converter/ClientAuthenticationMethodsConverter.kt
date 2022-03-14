@@ -9,14 +9,13 @@ import javax.persistence.Converter
 class ClientAuthenticationMethodsConverter: AttributeConverter<Set<ClientAuthenticationMethod>, String> {
 
     override fun convertToDatabaseColumn(attribute: Set<ClientAuthenticationMethod>): String {
-
-        return attribute.stream().map { it.value }.collect(Collectors.joining(","))
-
+        return attribute.stream()
+            .map { it.value }
+            .collect(Collectors.joining(","))
     }
 
     override fun convertToEntityAttribute(dbData: String): Set<ClientAuthenticationMethod> {
-        return dbData.split(",")
-            .stream()
+        return dbData.split(",").stream()
             .map { ClientAuthenticationMethod(it) }
             .collect(Collectors.toSet())
     }
