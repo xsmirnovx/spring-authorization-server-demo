@@ -1,6 +1,6 @@
-package io.github.xsmirnovx.oauth2.server.service
+package io.github.xsmirnovx.oauth2.server.adapters.api
 
-import io.github.xsmirnovx.oauth2.server.repository.RegisteredClientEntityRepository
+import io.github.xsmirnovx.oauth2.server.adapters.database.RegisteredClientEntityRepository
 import org.springframework.stereotype.Service
 
 @Service

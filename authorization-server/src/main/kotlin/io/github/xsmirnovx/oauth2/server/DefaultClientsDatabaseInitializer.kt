@@ -1,7 +1,9 @@
 package io.github.xsmirnovx.oauth2.server
 
-import io.github.xsmirnovx.oauth2.server.domain.RegisteredClientEntity
-import io.github.xsmirnovx.oauth2.server.repository.RegisteredClientEntityRepository
+import io.github.xsmirnovx.oauth2.server.adapters.database.RegisteredClientEntityRepository
+import io.github.xsmirnovx.oauth2.server.configuration.RegisteredClientsProperties
+import io.github.xsmirnovx.oauth2.server.domain.RegisteredClient.toEntity
+import io.github.xsmirnovx.oauth2.server.repository.entity.RegisteredClientEntity
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -17,8 +19,7 @@ class DefaultClientsDatabaseInitializer(
     val registeredClientEntityRepository: RegisteredClientEntityRepository,
     val passwordEncoder: PasswordEncoder,
     val tokenSettings: TokenSettings,
-
-    ) : ApplicationListener<ApplicationReadyEvent?> {
+    val registeredClientsProperties: RegisteredClientsProperties) : ApplicationListener<ApplicationReadyEvent?> {
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
 
@@ -29,6 +30,18 @@ class DefaultClientsDatabaseInitializer(
                                 .ifPresentOrElse( {}, { registeredClientEntityRepository.save(it) })
             }
         }
+//        registeredClientsProperties.clients?.values?.stream()
+//            ?.map { it.toRegisteredClient(passwordEncoder::encode) }
+//           /// ?.map { it.tokenSettings = tokenSettings }
+//            ?.map { it.toEntity() }
+//            ?.forEach {
+//                it
+//                    .clientId?.let { clientId ->
+//                        registeredClientEntityRepository
+//                            .findByClientId(clientId)
+//                            .ifPresentOrElse({}, { registeredClientEntityRepository.save(it) })
+//                    }
+//            }
     }
 
     private val defaultClients: Set<RegisteredClientEntity>
