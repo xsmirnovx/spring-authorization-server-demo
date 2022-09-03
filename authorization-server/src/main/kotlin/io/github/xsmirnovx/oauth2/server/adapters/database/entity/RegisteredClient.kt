@@ -4,6 +4,7 @@ import io.github.xsmirnovx.oauth2.server.adapters.database.converter.*
 import org.hibernate.annotations.GenericGenerator
 import org.springframework.security.oauth2.core.AuthorizationGrantType
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod
+import org.springframework.security.oauth2.server.authorization.client.RegisteredClient as RegisteredClientDomain
 import org.springframework.security.oauth2.server.authorization.config.ClientSettings
 import org.springframework.security.oauth2.server.authorization.config.TokenSettings
 import java.time.Instant
@@ -46,4 +47,46 @@ data class RegisteredClient(
     @Column(length = 2000)
     @Convert(converter = TokenSettingsConverter::class)
     val tokenSettings: TokenSettings? = null
-)
+) {
+
+    companion object {
+
+        fun fromDomain(domain: RegisteredClientDomain): RegisteredClient {
+            return RegisteredClient(
+                clientId = domain.clientId,
+                clientIdIssuedAt = domain.clientIdIssuedAt,
+                clientSecret = domain.clientSecret,
+                clientSecretExpiresAt = domain.clientSecretExpiresAt,
+                clientName = domain.clientName,
+                clientAuthenticationMethods = domain.clientAuthenticationMethods,
+                authorizationGrantTypes = domain.authorizationGrantTypes,
+                redirectUris = domain.redirectUris,
+                scopes = domain.scopes,
+                clientSettings = domain.clientSettings,
+                tokenSettings = domain.tokenSettings
+            )
+        }
+
+        fun toDomain(entity: RegisteredClient): org.springframework.security.oauth2.server.authorization.client.RegisteredClient {
+            return RegisteredClientDomain.withId(entity.id)
+                .clientId(entity.clientId)
+                .clientIdIssuedAt(entity.clientIdIssuedAt)
+                .clientSecret(entity.clientSecret)
+                .clientSecretExpiresAt(entity.clientSecretExpiresAt)
+                .clientName(entity.clientName)
+                .clientAuthenticationMethods(appender(entity.clientAuthenticationMethods))
+                .authorizationGrantTypes(appender(entity.authorizationGrantTypes))
+                .redirectUris(appender(entity.redirectUris))
+                .scopes(appender(entity.scopes))
+                .clientSettings(entity.clientSettings)
+                .tokenSettings(entity.tokenSettings)
+                .build()
+        }
+
+        private fun <T> appender(values: Set<T?>?): (MutableSet<T?>) -> Unit {
+            return {
+                values?.forEach { value: T? -> it.add(value) }
+            }
+        }
+    }
+}
