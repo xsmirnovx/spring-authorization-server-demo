@@ -1,8 +1,7 @@
 package io.github.xsmirnovx.oauth2.server.adapters.database
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.github.xsmirnovx.oauth2.server.domain.RegisteredClientExtension.fromEntity
-import io.github.xsmirnovx.oauth2.server.domain.RegisteredClientExtension.toEntity
+import io.github.xsmirnovx.oauth2.server.adapters.database.entity.RegisteredClient as RegisteredClientEntity
 import io.github.xsmirnovx.oauth2.server.exception.RegisteredClientNotFoundException
 import org.springframework.security.jackson2.SecurityJackson2Modules
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient
@@ -23,12 +22,12 @@ class RegisteredClientRepositoryImpl(
     }
 
     override fun save(registeredClient: RegisteredClient) {
-        registeredClientRepository.save(registeredClient.toEntity())
+        registeredClientRepository.save(RegisteredClientEntity.fromDomain(registeredClient))
     }
 
     override fun findById(id: String): RegisteredClient {
         return registeredClientRepository.findById(id)
-            .map { fromEntity(it) }
+            .map { RegisteredClientEntity.toDomain(it) }
             .orElseThrow {
                 RegisteredClientNotFoundException("Client with id not found: [$id]")
             }
@@ -36,7 +35,7 @@ class RegisteredClientRepositoryImpl(
 
     override fun findByClientId(clientId: String): RegisteredClient {
         return registeredClientRepository.findByClientId(clientId)
-            .map { fromEntity(it) }
+            .map { RegisteredClientEntity.toDomain(it) }
             .orElseThrow {
                 RegisteredClientNotFoundException("Client with client id not found: [$clientId]")
             }
