@@ -42,6 +42,7 @@ CREATE TABLE IF NOT EXISTS oauth2_registered_client (
     PRIMARY KEY (id)
 );
 
+
 CREATE TABLE IF NOT EXISTS oauth2_authorization_consent (
     registered_client_id varchar(100) NOT NULL,
     principal_name varchar(200) NOT NULL,

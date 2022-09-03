@@ -1,10 +1,10 @@
-package io.github.xsmirnovx.oauth2.server.service;
+package io.github.xsmirnovx.oauth2.server.adapters.database;
 
 import org.springframework.security.oauth2.core.OAuth2TokenType
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService
 
-public class JpaOAuth2AuthorizationService : OAuth2AuthorizationService {
+class JpaOAuth2AuthorizationService : OAuth2AuthorizationService {
 
     override fun save(authorization: OAuth2Authorization?) {
         TODO("Not yet implemented")
@@ -21,5 +21,4 @@ public class JpaOAuth2AuthorizationService : OAuth2AuthorizationService {
     override fun findByToken(token: String?, tokenType: OAuth2TokenType?): OAuth2Authorization? {
         TODO("Not yet implemented")
     }
-
 }
