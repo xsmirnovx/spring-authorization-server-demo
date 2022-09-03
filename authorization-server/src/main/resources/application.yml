@@ -24,24 +24,27 @@ clients:
       - https://oidcdebugger.com/debug
     scopes:
       - openid
+    client-settings:
+      pkce: true
+      consent: false
 
-    auth-code-client:
-      clientId: demo-auth-code-client
-      secret: 123456
-      authenticationMethods:
-        - client_secret_post
-      grants:
-        - authorization_code
-        - refresh_token
-      redirectUris:
-        - https://oidcdebugger.com/debug
-      scopes:
-        - openid
+  auth-code-client:
+    clientId: demo-auth-code-client
+    secret: 123456
+    authenticationMethods:
+      - client_secret_post
+    grants:
+      - authorization_code
+      - refresh_token
+    redirectUris:
+      - https://oidcdebugger.com/debug
+    scopes:
+      - openid
 
-    client-credentials-client:
-      clientId: demo-client-credentials-client
-      secret: 123456
-      authenticationMethods:
-        - client_secret_post
-      grants:
-        - client_credentials
+  client-credentials-client:
+    clientId: demo-client-credentials-client
+    secret: 123456
+    authenticationMethods:
+      - client_secret_post
+    grants:
+      - client_credentials

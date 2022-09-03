@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.security.oauth2.core.AuthorizationGrantType
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient
+import org.springframework.security.oauth2.server.authorization.config.ClientSettings
 import org.springframework.stereotype.Component
 import java.util.*
 
@@ -17,7 +18,8 @@ data class RegisteredClientsProperties(var clients: Map<String, RegisteredClient
         var scopes: Set<String>? = null,
         var redirectUris: Set<String>? = null,
         var grants: Set<AuthorizationGrantType>? = null,
-        var authenticationMethods: Set<ClientAuthenticationMethod>? = null
+        var authenticationMethods: Set<ClientAuthenticationMethod>? = null,
+        var clientSettings: ClientSettingsProperties? = null
     ) {
 
         fun toRegisteredClient(): RegisteredClient {
@@ -27,11 +29,17 @@ data class RegisteredClientsProperties(var clients: Map<String, RegisteredClient
         fun toRegisteredClient(secretEncoder: (String) -> String): RegisteredClient {
             return RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId(clientId)
-                .clientSecret(secretEncoder.invoke(secret.toString())) // fixme
+                .clientSecret(secretEncoder(secret.toString())) // fixme
                 .scopes(appender(scopes))
                 .redirectUris(appender(redirectUris))
                 .authorizationGrantTypes(appender(grants))
                 .clientAuthenticationMethods(appender(authenticationMethods))
+                .clientSettings(clientSettings?.let {
+                    ClientSettings.builder()
+                        .requireProofKey(it.pkce)
+                        .requireAuthorizationConsent(it.consent)
+                        .build()
+                })
                 .build()
         }
 
@@ -41,4 +49,9 @@ data class RegisteredClientsProperties(var clients: Map<String, RegisteredClient
             }
         }
     }
+
+    data class ClientSettingsProperties(
+        var pkce: Boolean = false,
+        var consent: Boolean = false
+    )
 }

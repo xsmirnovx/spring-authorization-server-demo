@@ -46,7 +46,7 @@ data class RegisteredClient(
 
     @Column(length = 2000)
     @Convert(converter = TokenSettingsConverter::class)
-    val tokenSettings: TokenSettings? = null
+    var tokenSettings: TokenSettings? = null
 ) {
 
     companion object {
@@ -54,7 +54,7 @@ data class RegisteredClient(
         fun fromDomain(domain: RegisteredClientDomain): RegisteredClient {
             return RegisteredClient(
                 clientId = domain.clientId,
-                clientIdIssuedAt = domain.clientIdIssuedAt,
+                clientIdIssuedAt = domain.clientIdIssuedAt.let { Instant.now() },
                 clientSecret = domain.clientSecret,
                 clientSecretExpiresAt = domain.clientSecretExpiresAt,
                 clientName = domain.clientName,
