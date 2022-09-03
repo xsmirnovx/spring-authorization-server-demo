@@ -1,35 +1,12 @@
 package io.github.xsmirnovx.oauth2.server.adapters.database
 
-import io.github.xsmirnovx.oauth2.server.domain.RegisteredClient.fromEntity
-import io.github.xsmirnovx.oauth2.server.domain.RegisteredClient.toEntity
-import io.github.xsmirnovx.oauth2.server.exception.RegisteredClientNotFoundException
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClient
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository
-import org.springframework.stereotype.Component
+import io.github.xsmirnovx.oauth2.server.adapters.database.entity.RegisteredClient
+import org.springframework.data.jpa.repository.JpaRepository
+import org.springframework.stereotype.Repository
+import java.util.*
 
-@Component
-class JpaRegisteredClientRepository(
-    val registeredClientEntityRepository: RegisteredClientEntityRepository
-) : RegisteredClientRepository {
+@Repository
+interface JpaRegisteredClientRepository : JpaRepository<RegisteredClient, String> {
 
-    override fun save(registeredClient: RegisteredClient) {
-        registeredClientEntityRepository
-            .save(registeredClient.toEntity())
-    }
-
-    override fun findById(id: String): RegisteredClient {
-        return registeredClientEntityRepository.findById(id)
-            .map { fromEntity(it) }
-            .orElseThrow {
-                RegisteredClientNotFoundException("Client with id not found: [$id]")
-            }
-    }
-
-    override fun findByClientId(clientId: String): RegisteredClient {
-        return registeredClientEntityRepository.findByClientId(clientId)
-            .map { fromEntity(it) }
-            .orElseThrow {
-                RegisteredClientNotFoundException("Client with client id not found: [$clientId]")
-            }
-    }
+    fun findByClientId(clientId: String): Optional<RegisteredClient>
 }

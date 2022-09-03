@@ -10,15 +10,15 @@ import java.util.*
 @Component
 @ConfigurationProperties
 class RegisteredClientsProperties {
-    val clients: Map<String, RegisteredClientProperties>? = null
+    var clients: Map<String, RegisteredClientProperties>? = null
 
     class RegisteredClientProperties {
-        val clientId: String? = null
-        private val secret: String? = null
-        private val scopes: Set<String>? = null
-        private val redirectUris: Set<String>? = null
-        private val grants: Set<AuthorizationGrantType>? = null
-        private val authenticationMethods: Set<ClientAuthenticationMethod>? = null
+        var clientId: String? = null
+        var secret: String? = null
+        var scopes: Set<String>? = null
+        var redirectUris: Set<String>? = null
+        var grants: Set<AuthorizationGrantType>? = null
+        var authenticationMethods: Set<ClientAuthenticationMethod>? = null
 
         fun toRegisteredClient(): RegisteredClient {
             return toRegisteredClient { it }

@@ -1,10 +1,10 @@
 package io.github.xsmirnovx.oauth2.server.domain
 
-import io.github.xsmirnovx.oauth2.server.repository.entity.RegisteredClientEntity
 import org.springframework.beans.BeanUtils
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient
+import io.github.xsmirnovx.oauth2.server.adapters.database.entity.RegisteredClient as RegisteredClientEntity
 
-object RegisteredClient {
+object RegisteredClientExtension {
 
     fun RegisteredClient.toEntity(): RegisteredClientEntity {
         val registeredClientEntity = RegisteredClientEntity()

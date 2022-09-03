@@ -1,4 +1,4 @@
-package io.github.xsmirnovx.oauth2.server.service;
+package io.github.xsmirnovx.oauth2.server.adapters.database;
 
 import org.springframework.security.oauth2.core.OAuth2TokenType
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization

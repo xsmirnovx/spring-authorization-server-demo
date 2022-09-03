@@ -1,4 +1,4 @@
-package io.github.xsmirnovx.oauth2.server.converter
+package io.github.xsmirnovx.oauth2.server.adapters.database.converter
 
 import java.util.*
 import javax.persistence.AttributeConverter

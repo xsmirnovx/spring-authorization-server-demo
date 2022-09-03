@@ -1,9 +1,7 @@
-package io.github.xsmirnovx.oauth2.server
+package io.github.xsmirnovx.oauth2.server.adapters.database
 
-import io.github.xsmirnovx.oauth2.server.adapters.database.RegisteredClientEntityRepository
+import io.github.xsmirnovx.oauth2.server.adapters.database.entity.RegisteredClient
 import io.github.xsmirnovx.oauth2.server.configuration.RegisteredClientsProperties
-import io.github.xsmirnovx.oauth2.server.domain.RegisteredClient.toEntity
-import io.github.xsmirnovx.oauth2.server.repository.entity.RegisteredClientEntity
 import org.springframework.boot.context.event.ApplicationReadyEvent
 import org.springframework.context.ApplicationListener
 import org.springframework.security.crypto.password.PasswordEncoder
@@ -16,7 +14,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class DefaultClientsDatabaseInitializer(
-    val registeredClientEntityRepository: RegisteredClientEntityRepository,
+    val registeredClientEntityRepository: JpaRegisteredClientRepository,
     val passwordEncoder: PasswordEncoder,
     val tokenSettings: TokenSettings,
     val registeredClientsProperties: RegisteredClientsProperties) : ApplicationListener<ApplicationReadyEvent?> {
@@ -44,10 +42,10 @@ class DefaultClientsDatabaseInitializer(
 //            }
     }
 
-    private val defaultClients: Set<RegisteredClientEntity>
+    private val defaultClients: Set<RegisteredClient>
         get() {
 
-            val authCodePkceClient = RegisteredClientEntity(
+            val authCodePkceClient = RegisteredClient(
                 clientId = "demo-auth-code-pkce-client",
                 clientName = "demo-auth-code-pkce-client",
                 clientSecret = passwordEncoder.encode("123456"),
@@ -61,7 +59,7 @@ class DefaultClientsDatabaseInitializer(
                 scopes = setOf(OidcScopes.OPENID)
             )
 
-            val authCodeClient = RegisteredClientEntity(
+            val authCodeClient = RegisteredClient(
                 clientId = "demo-auth-code-client",
                 clientName = "demo-auth-code-client",
                 clientSecret = passwordEncoder.encode("123456"),
@@ -72,16 +70,18 @@ class DefaultClientsDatabaseInitializer(
                 redirectUris = setOf(
                     "https://oidcdebugger.com/debug", "http://react-app:5001/oauth_callback"),
                 scopes = setOf(OidcScopes.OPENID),
-                tokenSettings = tokenSettings
+                tokenSettings = tokenSettings,
+                clientSettings = ClientSettings.builder().build()
             )
 
-            val clientCredentialsClient = RegisteredClientEntity(
+            val clientCredentialsClient = RegisteredClient(
                 clientId = "demo-client-credentials-client",
                 clientName = "demo-client-credentials-client",
                 clientSecret = "{noop}123456",
                 clientAuthenticationMethods = setOf(ClientAuthenticationMethod.CLIENT_SECRET_POST),
                 authorizationGrantTypes = setOf(AuthorizationGrantType.CLIENT_CREDENTIALS),
-                tokenSettings = tokenSettings
+                tokenSettings = tokenSettings,
+                clientSettings = ClientSettings.builder().build()
             )
 
             return setOf(authCodeClient, authCodePkceClient, clientCredentialsClient)

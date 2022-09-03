@@ -1,4 +1,4 @@
-package io.github.xsmirnovx.oauth2.server.converter
+package io.github.xsmirnovx.oauth2.server.adapters.database.converter
 
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
