@@ -16,18 +16,18 @@ class DefaultClientsDatabaseInitializer(
     val registeredClientsProperties: RegisteredClientsProperties) : ApplicationListener<ApplicationReadyEvent?> {
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
-
         registeredClientsProperties.clients?.values?.stream()
             ?.map { it.toRegisteredClient(passwordEncoder::encode) }
             ?.map { RegisteredClientEntity.fromDomain(it) }
             ?.map { it.copy(tokenSettings = tokenSettings) }
-            ?.forEach {
-                it
-                    .clientId?.let { clientId ->
-                        registeredClientEntityRepository
-                            .findByClientId(clientId)
-                            .ifPresentOrElse({}, { registeredClientEntityRepository.save(it) })
-                    }
-            }
+            ?.forEach { saveRegisteredClient(it) }
+    }
+
+    private fun saveRegisteredClient(entity: RegisteredClientEntity) {
+        entity.clientId?.let {
+            registeredClientEntityRepository
+                .findByClientId(it)
+                .ifPresentOrElse({}, { registeredClientEntityRepository.save(entity) })
+        }
     }
 }
