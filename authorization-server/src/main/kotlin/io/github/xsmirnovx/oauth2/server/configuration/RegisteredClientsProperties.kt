@@ -9,16 +9,16 @@ import java.util.*
 
 @Component
 @ConfigurationProperties
-class RegisteredClientsProperties {
-    var clients: Map<String, RegisteredClientProperties>? = null
+data class RegisteredClientsProperties(var clients: Map<String, RegisteredClientProperties>? = null) {
 
-    class RegisteredClientProperties {
-        var clientId: String? = null
-        var secret: String? = null
-        var scopes: Set<String>? = null
-        var redirectUris: Set<String>? = null
-        var grants: Set<AuthorizationGrantType>? = null
+    data class RegisteredClientProperties(
+        var clientId: String? = null,
+        var secret: String? = null,
+        var scopes: Set<String>? = null,
+        var redirectUris: Set<String>? = null,
+        var grants: Set<AuthorizationGrantType>? = null,
         var authenticationMethods: Set<ClientAuthenticationMethod>? = null
+    ) {
 
         fun toRegisteredClient(): RegisteredClient {
             return toRegisteredClient { it }
