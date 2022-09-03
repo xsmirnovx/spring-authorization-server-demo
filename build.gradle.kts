@@ -13,6 +13,9 @@ plugins {
 	kotlin("plugin.spring") version "1.6.10"
 }
 
+tasks.bootJar {enabled = false}
+tasks.jar {enabled = true}
+
 allprojects {
 	group = "io.github.xsmirnovx"
 	version = "0.0.1-SNAPSHOT"
