@@ -13,8 +13,8 @@ class DefaultClientsDatabaseInitializer(
     val registeredClientEntityRepository: JpaRegisteredClientRepository,
     val passwordEncoder: PasswordEncoder,
     val tokenSettings: TokenSettings,
-    val registeredClientsProperties: RegisteredClientsProperties)
-        : ApplicationListener<ApplicationReadyEvent?> {
+    val registeredClientsProperties: RegisteredClientsProperties
+) : ApplicationListener<ApplicationReadyEvent?> {
 
     override fun onApplicationEvent(event: ApplicationReadyEvent) {
         registeredClientsProperties.clients?.values?.stream()

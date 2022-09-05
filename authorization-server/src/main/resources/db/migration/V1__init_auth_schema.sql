@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS oauth2_authorization (
     refresh_token_issued_at timestamp DEFAULT NULL,
     refresh_token_expires_at timestamp DEFAULT NULL,
     refresh_token_metadata varchar(2000) DEFAULT NULL,
+    oidc_id_token_claims varchar(2000) DEFAULT NULL,
     PRIMARY KEY (id)
 );
 

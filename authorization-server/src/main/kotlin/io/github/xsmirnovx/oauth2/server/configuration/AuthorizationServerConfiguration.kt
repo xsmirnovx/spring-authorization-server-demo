@@ -27,10 +27,10 @@ class AuthorizationServerConfiguration {
         return http.formLogin(Customizer.withDefaults()).build()
     }
 
-    @Bean
-    fun authorizationService(jdbcTemplate: JdbcTemplate, registeredClientRepository: RegisteredClientRepository): OAuth2AuthorizationService {
-        return JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
-    }
+//    @Bean
+//    fun authorizationService(jdbcTemplate: JdbcTemplate, registeredClientRepository: RegisteredClientRepository): OAuth2AuthorizationService {
+//        return JdbcOAuth2AuthorizationService(jdbcTemplate, registeredClientRepository);
+//    }
 
 //    @Bean
 //    public OAuth2AuthorizationConsentService authorizationConsentService(JdbcTemplate jdbcTemplate, RegisteredClientRepository registeredClientRepository) {

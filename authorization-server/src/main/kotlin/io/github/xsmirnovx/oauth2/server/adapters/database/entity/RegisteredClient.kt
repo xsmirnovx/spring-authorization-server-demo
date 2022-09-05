@@ -67,7 +67,7 @@ data class RegisteredClient(
             )
         }
 
-        fun toDomain(entity: RegisteredClient): org.springframework.security.oauth2.server.authorization.client.RegisteredClient {
+        fun toDomain(entity: RegisteredClient): RegisteredClientDomain {
             return RegisteredClientDomain.withId(entity.id)
                 .clientId(entity.clientId)
                 .clientIdIssuedAt(entity.clientIdIssuedAt)
