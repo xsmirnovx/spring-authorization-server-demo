@@ -67,20 +67,22 @@ data class RegisteredClient(
             )
         }
 
-        fun toDomain(entity: RegisteredClient): RegisteredClientDomain {
-            return RegisteredClientDomain.withId(entity.id)
-                .clientId(entity.clientId)
-                .clientIdIssuedAt(entity.clientIdIssuedAt)
-                .clientSecret(entity.clientSecret)
-                .clientSecretExpiresAt(entity.clientSecretExpiresAt)
-                .clientName(entity.clientName)
-                .clientAuthenticationMethods(appender(entity.clientAuthenticationMethods))
-                .authorizationGrantTypes(appender(entity.authorizationGrantTypes))
-                .redirectUris(appender(entity.redirectUris))
-                .scopes(appender(entity.scopes))
-                .clientSettings(entity.clientSettings)
-                .tokenSettings(entity.tokenSettings)
-                .build()
+        fun toDomain(entity: RegisteredClient?): RegisteredClientDomain? {
+            return entity?.let {
+                RegisteredClientDomain.withId(entity.id)
+                    .clientId(entity.clientId)
+                    .clientIdIssuedAt(entity.clientIdIssuedAt)
+                    .clientSecret(entity.clientSecret)
+                    .clientSecretExpiresAt(entity.clientSecretExpiresAt)
+                    .clientName(entity.clientName)
+                    .clientAuthenticationMethods(appender(entity.clientAuthenticationMethods))
+                    .authorizationGrantTypes(appender(entity.authorizationGrantTypes))
+                    .redirectUris(appender(entity.redirectUris))
+                    .scopes(appender(entity.scopes))
+                    .clientSettings(entity.clientSettings)
+                    .tokenSettings(entity.tokenSettings)
+                    .build()
+            }
         }
 
         private fun <T> appender(values: Set<T?>?): (MutableSet<T?>) -> Unit {

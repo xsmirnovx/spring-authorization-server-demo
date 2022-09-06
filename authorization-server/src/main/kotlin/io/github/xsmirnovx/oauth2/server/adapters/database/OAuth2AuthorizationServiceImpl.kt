@@ -72,11 +72,4 @@ class OAuth2AuthorizationServiceImpl(val authorizationRepository: JpaAuthorizati
             }
         }
     }
-
-//    init {
-//        Assert.notNull(authorizationRepository, "authorizationRepository cannot be null")
-//        Assert.notNull(registeredClientRepository, "registeredClientRepository cannot be null")
-//        this.authorizationRepository = authorizationRepository
-//        this.registeredClientRepository = registeredClientRepository
-//    }
 }

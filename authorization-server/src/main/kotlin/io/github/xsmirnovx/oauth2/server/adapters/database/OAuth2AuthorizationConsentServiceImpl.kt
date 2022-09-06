@@ -8,7 +8,7 @@ import org.springframework.util.Assert
 
 @Component
 class OAuth2AuthorizationConsentServiceImpl(
-    val authorizationConsentRepository: JpaAuthorizationConsentRepository,
+    val authorizationConsentRepository: JpaAuthorizationConsentRepository
 ) : OAuth2AuthorizationConsentService {
 
     override fun save(authorizationConsent: OAuth2AuthorizationConsent) {
