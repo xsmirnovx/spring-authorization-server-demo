@@ -123,10 +123,11 @@ data class Authorization(
                     StringUtils.collectionToDelimitedString(accessToken.token.scopes, ",")
                 },
 
-               // oidcIdTokenClaims = oidcIdToken?.claims?.let { writeMap(it) }
+                oidcIdTokenClaims = oidcIdToken?.claims?.let { writeMap(it) }
             )
         }
 
+        // FIXME:
         fun toDomain(entity: Authorization): OAuth2Authorization? {
 
             val builder = OAuth2Authorization.withRegisteredClient(RegisteredClient.toDomain(entity.registeredClient!!))
