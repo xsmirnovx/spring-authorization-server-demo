@@ -3,8 +3,6 @@ package io.github.xsmirnovx.oauth2.server.adapters.database.entity
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationConsent
 import org.springframework.util.StringUtils
-import java.io.Serializable
-import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -44,22 +42,5 @@ data class AuthorizationConsent(
                 authorities = StringUtils.collectionToCommaDelimitedString(domain.authorities)
             )
         }
-    }
-}
-
-class AuthorizationConsentId : Serializable {
-    private val registeredClient: RegisteredClient? = null
-    private val principalName: String? = null
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || javaClass != other.javaClass) return false
-        val that = other as AuthorizationConsentId
-        return registeredClient?.id == that.registeredClient?.id
-                && principalName == that.principalName
-    }
-
-    override fun hashCode(): Int {
-        return Objects.hash(registeredClient?.id, principalName)
     }
 }
