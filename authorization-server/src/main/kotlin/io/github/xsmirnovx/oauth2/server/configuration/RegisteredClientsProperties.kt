@@ -29,7 +29,7 @@ data class RegisteredClientsProperties(var clients: Map<String, RegisteredClient
         fun toRegisteredClient(secretEncoder: (String) -> String): RegisteredClient {
             return RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId(clientId)
-                .clientSecret(secretEncoder(secret.toString())) // fixme
+                .clientSecret(secretEncoder(secret!!))
                 .scopes(appender(scopes))
                 .redirectUris(appender(redirectUris))
                 .authorizationGrantTypes(appender(grants))
