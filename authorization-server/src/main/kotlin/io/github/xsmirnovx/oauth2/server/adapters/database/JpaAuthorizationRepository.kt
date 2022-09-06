@@ -21,5 +21,6 @@ interface JpaAuthorizationRepository : JpaRepository<Authorization?, String?> {
                 " or a.accessTokenValue = :token" +
                 " or a.refreshTokenValue = :token"
     )
-    fun findByStateOrAuthorizationCodeValueOrAccessTokenValueOrRefreshTokenValue(@Param("token") token: String?): Optional<Authorization?>?
+    fun findByStateOrAuthorizationCodeValueOrAccessTokenValueOrRefreshTokenValue(
+        @Param("token") token: String?): Optional<Authorization?>?
 }
