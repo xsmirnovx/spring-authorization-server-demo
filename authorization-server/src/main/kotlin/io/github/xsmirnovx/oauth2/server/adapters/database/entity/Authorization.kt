@@ -145,10 +145,12 @@ data class Authorization(
                         parseMap(entity.attributes)!!
                     )
                 }
-            if (entity.state != null) {
+
+            entity.state?.also {
                 builder.attribute(OAuth2ParameterNames.STATE, entity.state)
             }
-            if (entity.authorizationCodeValue != null) {
+
+            entity.authorizationCodeValue?.also {
                 val authorizationCode = OAuth2AuthorizationCode(
                     entity.authorizationCodeValue,
                     entity.authorizationCodeIssuedAt,
@@ -161,7 +163,8 @@ data class Authorization(
                         )
                     })
             }
-            if (entity.accessTokenValue != null) {
+
+            entity.accessTokenValue?.also {
                 val accessToken = OAuth2AccessToken(
                     OAuth2AccessToken.TokenType.BEARER,
                     entity.accessTokenValue,
@@ -176,7 +179,8 @@ data class Authorization(
                         )
                     })
             }
-            if (entity.refreshTokenValue != null) {
+
+            entity.refreshTokenValue?.also {
                 val refreshToken = OAuth2RefreshToken(
                     entity.refreshTokenValue,
                     entity.refreshTokenIssuedAt,
@@ -189,7 +193,8 @@ data class Authorization(
                         )
                     })
             }
-            if (entity.oidcIdTokenValue != null) {
+
+            entity.oidcIdTokenValue?.also {
                 val idToken = OidcIdToken(
                     entity.oidcIdTokenValue,
                     entity.oidcIdTokenIssuedAt,
@@ -203,6 +208,7 @@ data class Authorization(
                         )
                     })
             }
+
             return builder.build()
         }
 
