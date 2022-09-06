@@ -18,9 +18,11 @@ class OAuth2AuthorizationConsentServiceImpl(
 
     override fun remove(authorizationConsent: OAuth2AuthorizationConsent) {
         Assert.notNull(authorizationConsent, "authorizationConsent cannot be null")
-        authorizationConsentRepository.deleteByRegisteredClientIdAndPrincipalName(
-            authorizationConsent.registeredClientId, authorizationConsent.principalName
-        )
+        authorizationConsentRepository
+            .deleteByRegisteredClientIdAndPrincipalName(
+                authorizationConsent.registeredClientId,
+                authorizationConsent.principalName
+            )
     }
 
     override fun findById(registeredClientId: String, principalName: String): OAuth2AuthorizationConsent? {
@@ -28,9 +30,7 @@ class OAuth2AuthorizationConsentServiceImpl(
         Assert.hasText(principalName, "principalName cannot be empty")
         return authorizationConsentRepository
             .findByRegisteredClientIdAndPrincipalName(registeredClientId, principalName)
-            ?.get()
-            ?.let {
-                AuthorizationConsent.toDomain(it)
-            }
+            .map(AuthorizationConsent::toDomain)
+            .orElse(null)
     }
 }

@@ -8,18 +8,12 @@ import org.springframework.security.oauth2.core.OAuth2TokenType
 import org.springframework.security.oauth2.core.endpoint.OAuth2ParameterNames
 import org.springframework.security.oauth2.server.authorization.OAuth2Authorization
 import org.springframework.security.oauth2.server.authorization.OAuth2AuthorizationService
-import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository
 import org.springframework.stereotype.Component
 import org.springframework.util.Assert
 
 @Component
-class OAuth2AuthorizationServiceImpl(
-    authorizationRepository: JpaAuthorizationRepository,
-    registeredClientRepository: RegisteredClientRepository
-) : OAuth2AuthorizationService {
-
-    private val authorizationRepository: JpaAuthorizationRepository
-    private val registeredClientRepository: RegisteredClientRepository
+class OAuth2AuthorizationServiceImpl(val authorizationRepository: JpaAuthorizationRepository)
+    : OAuth2AuthorizationService {
 
     override fun save(authorization: OAuth2Authorization) {
         Assert.notNull(authorization, "authorization cannot be null")
@@ -33,36 +27,29 @@ class OAuth2AuthorizationServiceImpl(
 
     override fun findById(id: String): OAuth2Authorization? {
         Assert.hasText(id, "id cannot be empty")
-        val result = authorizationRepository.findById(id)
-
-        return result
-            .map { a: Authorization? -> toDomain(a!!) }
-            .orElse(null)
+        return authorizationRepository.findById(id).get().let(Authorization::toDomain)
     }
 
     override fun findByToken(token: String, tokenType: OAuth2TokenType?): OAuth2Authorization? {
         Assert.hasText(token, "token cannot be empty")
-        val result: Authorization?
-        when {
+        val result = when {
             tokenType == null -> {
-                result =
-                    authorizationRepository.findByStateOrAuthorizationCodeValueOrAccessTokenValueOrRefreshTokenValue(
-                        token
-                    )!!.get()
+                authorizationRepository
+                    .findByStateOrAuthorizationCodeValueOrAccessTokenValueOrRefreshTokenValue(token)!!.get()
             }
             OAuth2ParameterNames.STATE == tokenType.value -> {
-                result = authorizationRepository.findByState(token)!!.get()
+                authorizationRepository.findByState(token)!!.get()
             }
             OAuth2ParameterNames.CODE == tokenType.value -> {
-                result = authorizationRepository.findByAuthorizationCodeValue(token)!!.get()
+                 authorizationRepository.findByAuthorizationCodeValue(token)!!.get()
             }
             OAuth2ParameterNames.ACCESS_TOKEN == tokenType.value -> {
-                result = authorizationRepository.findByAccessTokenValue(token)!!.get()
+                authorizationRepository.findByAccessTokenValue(token)!!.get()
             }
             OAuth2ParameterNames.REFRESH_TOKEN == tokenType.value -> {
-                result = authorizationRepository.findByRefreshTokenValue(token)!!.get()
+                authorizationRepository.findByRefreshTokenValue(token)!!.get()
             }
-            else -> result = null
+            else -> null
         }
 
         return toDomain(result!!)
@@ -70,21 +57,26 @@ class OAuth2AuthorizationServiceImpl(
 
     companion object {
         fun resolveAuthorizationGrantType(authorizationGrantType: String): AuthorizationGrantType {
-            if (AuthorizationGrantType.AUTHORIZATION_CODE.value == authorizationGrantType) {
-                return AuthorizationGrantType.AUTHORIZATION_CODE
-            } else if (AuthorizationGrantType.CLIENT_CREDENTIALS.value == authorizationGrantType) {
-                return AuthorizationGrantType.CLIENT_CREDENTIALS
-            } else if (AuthorizationGrantType.REFRESH_TOKEN.value == authorizationGrantType) {
-                return AuthorizationGrantType.REFRESH_TOKEN
+            return when {
+                AuthorizationGrantType.AUTHORIZATION_CODE.value == authorizationGrantType -> {
+                    AuthorizationGrantType.AUTHORIZATION_CODE
+                }
+                AuthorizationGrantType.CLIENT_CREDENTIALS.value == authorizationGrantType -> {
+                    AuthorizationGrantType.CLIENT_CREDENTIALS
+                }
+                AuthorizationGrantType.REFRESH_TOKEN.value == authorizationGrantType -> {
+                    AuthorizationGrantType.REFRESH_TOKEN
+                }
+                // Custom authorization grant type
+                else -> AuthorizationGrantType(authorizationGrantType)
             }
-            return AuthorizationGrantType(authorizationGrantType) // Custom authorization grant type
         }
     }
 
-    init {
-        Assert.notNull(authorizationRepository, "authorizationRepository cannot be null")
-        Assert.notNull(registeredClientRepository, "registeredClientRepository cannot be null")
-        this.authorizationRepository = authorizationRepository
-        this.registeredClientRepository = registeredClientRepository
-    }
+//    init {
+//        Assert.notNull(authorizationRepository, "authorizationRepository cannot be null")
+//        Assert.notNull(registeredClientRepository, "registeredClientRepository cannot be null")
+//        this.authorizationRepository = authorizationRepository
+//        this.registeredClientRepository = registeredClientRepository
+//    }
 }

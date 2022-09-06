@@ -25,9 +25,9 @@ data class AuthorizationConsent(
 ) {
     companion object {
 
-        fun toDomain(entity: AuthorizationConsent) : OAuth2AuthorizationConsent? {
+        fun toDomain(entity: AuthorizationConsent?) : OAuth2AuthorizationConsent? {
             val builder = OAuth2AuthorizationConsent.withId(
-                entity.registeredClient?.id!!, entity.principalName!!
+                entity?.registeredClient?.id!!, entity.principalName!!
             )
             entity.authorities?.let {
                 for (authority in StringUtils.commaDelimitedListToSet(it)) {

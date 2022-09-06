@@ -11,7 +11,7 @@ import java.util.*
 interface JpaAuthorizationConsentRepository : JpaRepository<AuthorizationConsent?, AuthorizationConsentId?> {
 
     fun findByRegisteredClientIdAndPrincipalName(
-        registeredClientId: String?, principalName: String?): Optional<AuthorizationConsent?>?
+        registeredClientId: String?, principalName: String?): Optional<AuthorizationConsent?>
 
     fun deleteByRegisteredClientIdAndPrincipalName(
         registeredClientId: String?, principalName: String?)
